@@ -19,9 +19,7 @@ configuration NodeC{
 implementation {
     components MainC;
     components Node;//new components
-    components RandomC as Random;
     components new TimerMilliC() as neighborTimer;
-    components new TimerMilliC() as transmitTimer;
     components new AMReceiverC(AM_PACK) as GeneralReceive;
 
     Node -> MainC.Boot;
@@ -32,9 +30,6 @@ implementation {
 
     Node.neighborTimer -> neighborTimer;
 
-    Node.transmitTimer -> transmitTimer;
-
-    Node.Random -> Random;
 
 
     components ActiveMessageC;
@@ -46,10 +41,7 @@ implementation {
     components CommandHandlerC;
     Node.CommandHandler -> CommandHandlerC;
 
-    //new components (Hashmap LISTC AS PACKET NEIGHBOR AND SOCKET)
-
-    components new HashmapC(uint16_t, 64) as RoutingTableC;
-    Node.RoutingTable -> RoutingTableC; 
+    //new components ()
 
     components new ListC(pack, 64) as PacketListC;
     Node.PacketList -> PacketListC;
@@ -57,6 +49,4 @@ implementation {
     components new ListC(Neighbor, 64) as NeighborsC;
     Node.NeighborList -> NeighborsC;
 
-    components new ListC(socket_t, 10) as SocketList;
-    Node.SocketList -> SocketList;
 }
