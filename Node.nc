@@ -7,7 +7,7 @@
  *Kshav ayer
  */
 
-typedef struct Neigbor(
+typedef struct Neigbor{
 
    uint16_t srcNode;
     uint16_t Age;
