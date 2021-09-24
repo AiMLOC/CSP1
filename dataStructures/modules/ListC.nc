@@ -91,4 +91,16 @@ implementation{
 	command t List.get(uint16_t position){
 		return container[position];
 	}
+//Added command because I WANT TO REMOVE !!!!!!!!!!!!!!!!!!!!!!
+	command t List.remove(uint16_t position){
+        t temp;
+        uint16_t i;
+        temp = container[position];
+        for(i = 0; i < position; i++){
+            container[i + 1] = container[i];
+        }
+        container[0] = temp;        
+        temp = call List.popfront();
+        return temp;
+    }
 }
