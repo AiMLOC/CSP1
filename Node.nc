@@ -6,6 +6,14 @@
  * @date   2013/09/03
  *Kshav ayer
  */
+
+typedef struct Neigbor(
+
+   uint16_t srcNode;
+    uint16_t Age;
+
+} Neighbor;
+
 #include <Timer.h>
 #include "includes/command.h"
 #include "includes/packet.h"
@@ -25,17 +33,11 @@ module Node{
 
    uses interface CommandHandler;
 
-   //new
-   uses interface Timer<TMilli> as Timer;
-   uses interface Timer<TMilli> as TableUpdateTimer;
-   uses interface Timer<TMilli> as ListenTimer;
-   uses interface Timer<TMilli> as WriteTimer;
 
-   uses interface Random as Random;
+   //new 
+   uses interface List<pack> as PacketList; 
 
-   uses interface Transport;
-
-   uses interface List <pack> as PackLogs;
+   uses interface List<Neighbor> as NeighborList;
 
 }
 
