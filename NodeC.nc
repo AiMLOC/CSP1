@@ -18,9 +18,8 @@ configuration NodeC{
 }
 implementation {
     components MainC;
-    components Node;
-    components new AMReceiverC(AM_PACK) as GeneralReceive;
-    //new components
+    components Node;//new components
+    components RandomC as Random;
     components new TimerMilliC() as neighborTimer;
     components new TimerMilliC() as transmitTimer;
     components new AMReceiverC(AM_PACK) as GeneralReceive;
