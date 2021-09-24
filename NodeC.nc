@@ -12,7 +12,6 @@
 #include "includes/packet.h"
 //new
 #include "includes/socket.h"
-#include "includes/TCPpacket.h"
 
 configuration NodeC{
 }
