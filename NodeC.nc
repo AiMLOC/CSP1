@@ -18,7 +18,7 @@ configuration NodeC{
 implementation {
     components MainC;
     components Node;//new components
-    components new TimerMilliC() as neighborTimer;
+    components new TimerMilliC() as RandomDiscoverNTimer;
     components new AMReceiverC(AM_PACK) as GeneralReceive;
 
     Node -> MainC.Boot;
@@ -27,7 +27,7 @@ implementation {
 
     //new node ref
 
-    Node.neighborTimer -> neighborTimer;
+    Node.RandomDiscoverNTimer -> RandomDiscoverNTimer;
 
 
 
