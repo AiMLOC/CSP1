@@ -35,9 +35,12 @@ module Node{
 
 
    //new 
+   uses interface Timer<TMilli> as neighborTimer;
+   
    uses interface List<pack> as PacketList; 
 
    uses interface List<Neighbor> as NeighborList;
+   
 
 }
 
@@ -61,10 +64,15 @@ implementation{
    event void AMControl.startDone(error_t err){
       if(err == SUCCESS){
          dbg(GENERAL_CHANNEL, "Radio On\n");
+         call neighborTimer.startPeriodic(1000);      //NEW Random firing timer for neighbor discovery
       }else{
          //Retry until successful
          call AMControl.start();
       }
+   }
+
+   event void neighborTimer.fired(){
+      findNeighbors();                                //NEW FUNC Every time the timer fires, update our list of neighbors and account for dropouts
    }
 
    event void AMControl.stopDone(error_t err){}
