@@ -175,7 +175,7 @@ implementation{
                 i--;
             }
         }
-        dbg(NEIGHBOR_CHANNEL, "DEBUG: Discovery ->\n");//DEBUG
+        dbg(GENERAL_CHANNEL, "DEBUG: Discovery ->\n");//DEBUG
         
         message = "swag";  //Packet message 
         makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, 2, PROTOCOL_PING, 1,     //Run makePack with vars to send discovery packet to AM ADDR
