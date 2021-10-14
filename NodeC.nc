@@ -48,4 +48,8 @@ implementation {
     components new ListC(Neighbor, 64) as NeighborsC;
     Node.NeighborList -> NeighborsC;
 
+    //new components 2
+    components new HashmapC(uint16_t, 64) as RoutingTableC;
+    Node.RoutingTable -> RoutingTableC; 
+
 }

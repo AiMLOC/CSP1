@@ -1,0 +1,3 @@
+git clone https://github.com/AiMLOC/CSP1
+make micaz sim
+python TestSim.py
