@@ -53,7 +53,9 @@ module Node{
 
 implementation{
    pack sendPackage;
-
+   //NEWPT2
+   uint16_t seqNum = 0;           // Increment the seqNum for each new pakcet
+   uint16_t LSTable[MAX][MAX];
    // Prototypes
    void makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t Protocol, uint16_t seq, uint8_t *payload, uint8_t length);
    //New PT
@@ -113,7 +115,7 @@ implementation{
                             (uint8_t *) myMsg->payload, sizeof(myMsg->payload));
                   seqNum++;
 
-                  addPack(sendPackage);
+                  addPacket(sendPackage);
                   if(call RoutingTable.get(myMsg->src)){
                      dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
                      call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
@@ -139,14 +141,14 @@ implementation{
                dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);
                makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, MAX_TTL, PROTOCOL_PINGREPLY, 
                             myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
-               addPack(sendPackage);
+               addPacket(sendPackage);
                call Sender.send(sendPackage, myMsg->src);
                break;
 
 //sssssssssssssssssssssssssssssssss
 
                  case PROTOCOL_PINGREPLY:
-                    if(!isNeighbor(myMsg->src)){
+                    if(!checkNeighbor(myMsg->src)){
                         neighbor.srcNode = myMsg->src;
                         neighbor.Age = 0;                                                                             // If the neighbor is not on our list put them on it
                         call NeighborList.pushback(neighbor);
@@ -170,7 +172,7 @@ implementation{
             makePack(&sendPackage, myMsg->src, myMsg->dest, myMsg->TTL, myMsg->protocol, myMsg->seq, 
                     (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
 
-            addPack(sendPackage);
+            addPacket(sendPackage);
 
             if(call RoutingTable.get(myMsg->dest)){
                 dbg(ROUTING_CHANNEL, "Route found, forwarding to %d\n", call RoutingTable.get(myMsg->dest));
