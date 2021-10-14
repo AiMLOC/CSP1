@@ -298,7 +298,7 @@ implementation{
         call Sender.send(sendPackage, AM_BROADCAST_ADDR);   //send
     }
 
-}
+
 
    //NEW Added Table Neighbors + Link-state flooding + Shortest-path Dijkstra + Forwarding   
     void initLSTable(){
@@ -423,4 +423,5 @@ implementation{
         }
 
         dbg(ROUTING_CHANNEL, "\n");
+    }
     }
