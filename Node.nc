@@ -97,53 +97,55 @@ implementation{
 
    event void AMControl.stopDone(error_t err){}
 
-   event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
-      dbg(GENERAL_CHANNEL, "Packet Received\n");
+//NEW
+      event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len){
+      
       if(len==sizeof(pack)){
          pack* myMsg=(pack*) payload;
-         //dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
-         //NEW PT2
-         if(packageCheck(myMsg) || myMsg->TTL == 0){
-            dbg(GENERAL_CHANNEL, "Packet Dropped\n");
-         }
-         else if(myMsg->dest == TOS_NODE_ID){
-            dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src); //CIf the packet arrived at the correct destination output the payload
+         if(packageCheck(myMsg) || myMsg->TTL == 0){ 
+             // dbg(GENERAL_CHANNEL, "Dropping the packet\n");
+         }else if(myMsg->dest == TOS_NODE_ID){  
+  
+             //dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // If the packet arrived at the correct destination output the payload   
+              
+             switch(myMsg->protocol){  
 
-            switch(myMsg->protocol){
-               case PROTOCOL_PING:
-                  makePack(&sendPackage, TOS_NODE_ID, myMsg->src, MAX_TTL, PROTOCOL_PINGREPLY, seqNum, 
+                case PROTOCOL_PING:
+                    makePack(&sendPackage, TOS_NODE_ID, myMsg->src, MAX_TTL, PROTOCOL_PINGREPLY, seqNum, 
                             (uint8_t *) myMsg->payload, sizeof(myMsg->payload));
-                  seqNum++;
+                    seqNum++;
 
-                  addPacket(sendPackage);
-                  if(call RoutingTable.get(myMsg->src)){
-                     dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
-                     call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
-                  }                  
-                  else
-                     dbg(ROUTING_CHANNEL, "Path not found, cancelling reply\n");
+                    addPacket(sendPackage);
+                    if(call RoutingTable.get(myMsg->src)){
+                        dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
+                        call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
+                    }                  
+                    else
+                        dbg(ROUTING_CHANNEL, "Path not found, cancelling reply\n");
 
-                  break;                                                                                              // Send a ping reply to the source using flooding                           
+                    break;                                                                                              // Send a ping reply to the source using flooding                           
             
-               case PROTOCOL_PINGREPLY:
-                  dbg(FLOODING_CHANNEL, "Received the ping reply from %d\n", myMsg->src);
-                  break;                                                                                              // Output if the ping reply was received  
-            }
-         else if(myMsg->dest == AM_BROADCAST_ADDR){
-            switch(myMsg->protocol){
-               Neighbor neighbor; // Broadcast packets will help us find neighbors
-               case PROTOCOL_PING:
-               dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);
-               makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, MAX_TTL, PROTOCOL_PINGREPLY, 
-                            myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
-               addPacket(sendPackage);
-               call Sender.send(sendPackage, myMsg->src);
-               break;
+                case PROTOCOL_PINGREPLY:
+                    dbg(FLOODING_CHANNEL, "Received the ping reply from %d\n", myMsg->src);
+                    break;                                                                                              // Output if the ping reply was received  
 
-//sssssssssssssssssssssssssssssssss
+            }
+
+         }else if(myMsg->dest == AM_BROADCAST_ADDR){
+
+             switch(myMsg->protocol){
+                Neighbor neighbor;                                                                                      // Broadcast packets will help us find neighbors    
+                case PROTOCOL_PING:
+                    // dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);                   
+                    makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, MAX_TTL, PROTOCOL_PINGREPLY, 
+                            myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));                     
+
+                    addPacket(sendPackage);
+                    call Sender.send(sendPackage, myMsg->src);
+                    break;
 
                  case PROTOCOL_PINGREPLY:
-                    if(!checkNeighbor(myMsg->src)){
+                    if(!isNeighbor(myMsg->src)){
                         neighbor.srcNode = myMsg->src;
                         neighbor.Age = 0;                                                                             // If the neighbor is not on our list put them on it
                         call NeighborList.pushback(neighbor);
@@ -162,28 +164,26 @@ implementation{
                     break;
             }
     
-         }
-         else{     
+         }else{     
             makePack(&sendPackage, myMsg->src, myMsg->dest, myMsg->TTL, myMsg->protocol, myMsg->seq, 
                     (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
 
             addPacket(sendPackage);
 
             if(call RoutingTable.get(myMsg->dest)){
-                dbg(ROUTING_CHANNEL, "Route found, forwarding to %d\n", call RoutingTable.get(myMsg->dest));
+                // dbg(ROUTING_CHANNEL, "Route found, forwarding to %d\n", call RoutingTable.get(myMsg->dest));
                 call Sender.send(sendPackage, call RoutingTable.get(myMsg->dest));
             }else{
                 dbg(ROUTING_CHANNEL, "Route not found...\n");
             }
-
-
-
+        
          }
+
+             return msg;
+     }
+         dbg(GENERAL_CHANNEL, "Unknown Packet Type %d\n", len);
          return msg;
-      }
-      dbg(GENERAL_CHANNEL, "Unknown Packet Type %d\n", len);
-      return msg;
-   }
+   }  
 
 
    event void CommandHandler.ping(uint16_t destination, uint8_t *payload){
