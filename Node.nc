@@ -128,11 +128,6 @@ implementation{
                case PROTOCOL_PINGREPLY:
                   dbg(FLOODING_CHANNEL, "Received the ping reply from %d\n", myMsg->src);
                   break;                                                                                              // Output if the ping reply was received  
-
-               case PROTOCOL_TCP:
-                  TCPHandler(myMsg);
-                  break;
-
             }
          else if(myMsg->dest == AM_BROADCAST_ADDR){
             switch(myMsg->protocol){
@@ -162,7 +157,7 @@ implementation{
                     makePack(&sendPackage, myMsg->src, myMsg->dest, myMsg->TTL, myMsg->protocol,
                             myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
 
-                    addPack(sendPackage);
+                    addPacket(sendPackage);
                     call Sender.send(sendPackage, AM_BROADCAST_ADDR);
                     break;
             }
@@ -331,7 +326,7 @@ implementation{
                 (uint8_t *) payload, (uint8_t)sizeof(payload));
 
         seqNum++;
-        addPack(sendPackage);
+        addPacket(sendPackage);
         call Sender.send(sendPackage, AM_BROADCAST_ADDR);
     }
 
