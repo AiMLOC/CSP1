@@ -103,7 +103,7 @@ implementation{
          pack* myMsg=(pack*) payload;
          //dbg(GENERAL_CHANNEL, "Package Payload: %s\n", myMsg->payload);
          //NEW PT2
-         if(checkForPack(myMsg) || myMsg->TTL == 0){
+         if(packageCheck(myMsg) || myMsg->TTL == 0){
             dbg(GENERAL_CHANNEL, "Packet Dropped\n");
          }
          else if(myMsg->dest == TOS_NODE_ID){
