@@ -145,7 +145,7 @@ implementation{
                     break;
 
                  case PROTOCOL_PINGREPLY:
-                    if(!isNeighbor(myMsg->src)){
+                    if(!checkNeighbor(myMsg->src)){
                         neighbor.srcNode = myMsg->src;
                         neighbor.Age = 0;                                                                             // If the neighbor is not on our list put them on it
                         call NeighborList.pushback(neighbor);
