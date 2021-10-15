@@ -9,7 +9,6 @@
 
 #define INFINITY      9999
 #define MAX           20
-#define TIMEOUT       140000
 
 typedef struct Neighbor{
 
@@ -288,7 +287,7 @@ implementation{
                 i--;
             }
         }
-        dbg(NEIGHBOR_CHANNEL, "DEBUG: Discovery ->\n");//DEBUG
+        dbg(NEIGHBOR_CHANNEL, "Discovery Packets -> Neighbor\n");//DEBUG
         
         message = "swag";  //Packet message 
         makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, 2, PROTOCOL_PING, 1,     //Run makePack with vars to send discovery packet to AM ADDR
