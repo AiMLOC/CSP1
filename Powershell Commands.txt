@@ -1,3 +1,11 @@
+docker run -ti ucmercedandeslab/tinyos_debian
+
+cd
+
 git clone https://github.com/AiMLOC/CSP1
+
+cd CSP1
+
 make micaz sim
+
 python TestSim.py
