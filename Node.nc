@@ -7,12 +7,12 @@
  *Kshav ayer
  */
 
-#define INFINITY      9999
-#define MAX           20
+#define LARGENUM      1000   //large num for various purposes
+#define LIMIT           20   //artificial limit 
 
 typedef struct Neighbor{
 
-   uint16_t srcNode;
+    uint16_t srcNode;
     uint16_t Age;
 
 } Neighbor;
@@ -54,7 +54,7 @@ implementation{
    pack sendPackage;
    //NEWPT2
    uint16_t seqNum = 0;           // Increment the seqNum for each new pakcet
-   uint16_t LSTable[MAX][MAX];
+   uint16_t LSTable[LIMIT][LIMIT];
    // Prototypes
    void makePack(pack *Package, uint16_t src, uint16_t dest, uint16_t TTL, uint16_t Protocol, uint16_t seq, uint8_t *payload, uint8_t length);
    //New PT
@@ -63,12 +63,12 @@ implementation{
    bool packageCheck(pack *Package);
    bool checkNeighbor(uint16_t src);
    //New PT2
-   void initLSTable(); 
-   void sendLSPacket();
-   void updateLSTable(uint8_t * payload, uint16_t source);
-   void printLSTable();
-   void dijkstra();
-   uint16_t minDist(uint16_t dist[], bool sptSet[]);
+   void createLinkStateTable(); 
+   void linkStatePacket();
+   void updateLinkStateTable(uint8_t * payload, uint16_t source);
+   void printLinkStateTable();
+   void linkStateRoutingDijkstra();
+   uint16_t minDistance(uint16_t dist[], bool sptSet[]);
    void printRoutingTable();
 
 
@@ -82,7 +82,7 @@ implementation{
    event void AMControl.startDone(error_t err){
       if(err == SUCCESS){
          dbg(GENERAL_CHANNEL, "Radio On\n");
-         initLSTable(); //Link State Table
+         createLinkStateTable(); //Link State Table
          call RandomDiscoverNTimer.startPeriodic(1000);      //NEW Random* Qing T for discovering neighbors
       }else{
          //Retry until successful
@@ -110,8 +110,7 @@ implementation{
              switch(myMsg->protocol){  
 
                 case PROTOCOL_PING:
-                    makePack(&sendPackage, TOS_NODE_ID, myMsg->src, MAX_TTL, PROTOCOL_PINGREPLY, seqNum, 
-                            (uint8_t *) myMsg->payload, sizeof(myMsg->payload));
+                    makePack(&sendPackage, TOS_NODE_ID, myMsg->src, MAX_TTL, PROTOCOL_PINGREPLY, seqNum, (uint8_t *) myMsg->payload, sizeof(myMsg->payload));
                     seqNum++;
 
                     addPacket(sendPackage);
@@ -149,12 +148,12 @@ implementation{
                         neighbor.Age = 0;                                                                             // If the neighbor is not on our list put them on it
                         call NeighborList.pushback(neighbor);
                         LSTable[TOS_NODE_ID - 1][myMsg->src - 1] = 1;
-                        sendLSPacket();
+                        linkStatePacket();
                     }
                     break;
 
                  case PROTOCOL_LINKSTATE:
-                    updateLSTable((uint8_t *)myMsg->payload, myMsg->src);                                           // If it's a link state pack update the link state table                                   
+                    updateLinkStateTable((uint8_t *)myMsg->payload, myMsg->src);                                           // If it's a link state pack update the link state table                                   
                     makePack(&sendPackage, myMsg->src, myMsg->dest, myMsg->TTL, myMsg->protocol,
                             myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
 
@@ -206,11 +205,12 @@ implementation{
    event void CommandHandler.printNeighbors(){}
 
    event void CommandHandler.printRouteTable(){
+      printLinkStateTable();
       printRoutingTable(); //added
    }
 
    event void CommandHandler.printLinkState(){
-      printLSTable(); //added
+      //printLinkStateTable(); //added
    }
 
    event void CommandHandler.printDistanceVector(){}
@@ -299,20 +299,30 @@ implementation{
 
 
 
+
+
+
+
+
+
+
+
+
+
    //NEW Added Table Neighbors + Link-state flooding + Shortest-path Dijkstra + Forwarding   
-    void initLSTable(){
+    void createLinkStateTable(){
         uint16_t i, j;
-        for(i = 0; i < MAX; i++){
-            for(j = 0; j < MAX; j++){
-                    LSTable[i][j] = INFINITY;                           // Initialize all link state table values to infinity(20)
+        for(i = 0; i < LIMIT; i++){
+            for(j = 0; j < LIMIT; j++){                                 //Create Empty table to LIMIT
+                    LSTable[i][j] = LARGENUM;                           // Set all LS table values to LARGENUM 20.
             }
         }
     }
 
-    void sendLSPacket(){
+    void linkStatePacket(){
         char payload[255];
         char tempC[127];
-        uint16_t i, size = call NeighborList.size();            // Construct the link state packet by concatenating the neighborlist to the payload
+        uint16_t i, size = call NeighborList.size();            // Construct the link state packet by linking the neighborlist to the payload in series
         Neighbor neighbor;      
         for(i = 0; i < size; i++){
             neighbor = call NeighborList.get(i);
@@ -329,7 +339,7 @@ implementation{
         call Sender.send(sendPackage, AM_BROADCAST_ADDR);
     }
 
-    void updateLSTable(uint8_t * payload, uint16_t source){
+    void updateLinkStateTable(uint8_t * payload, uint16_t source){
         uint8_t * temp = payload;
         uint16_t length = strlen((char *)payload);              // Update the link state table neighbor pairs upon receiving a link state packet
         uint16_t i = 0;
@@ -350,10 +360,10 @@ implementation{
                 LSTable[source - 1][atoi(buffer) - 1] = 1;
         }
 
-        dijkstra();
+        linkStateRoutingDijkstra();
     }
 
-    void printLSTable(){
+    void printLinkStateTable(){
         uint16_t i;                                            // Print out the neighbor pairs in the local link state table
         uint16_t j;
         for(i = 0; i < 20; i++){
@@ -364,45 +374,45 @@ implementation{
         }
     }
 
-    uint16_t minDist(uint16_t dist[], bool sptSet[]){
-        uint16_t min = INFINITY, minIndex = 18, i;
-        for(i = 0; i < MAX; i++){
+    uint16_t minDistance(uint16_t dist[], bool sptSet[]){
+        uint16_t min = LARGENUM, minIndex = 18, i;
+        for(i = 0; i < LIMIT; i++){
             if(sptSet[i] == FALSE && dist[i] < min)
                 min = dist[i], minIndex = i;
         }
         return minIndex;
     }
 
-    void dijkstra(){
+    void linkStateRoutingDijkstra(){
         uint16_t myID = TOS_NODE_ID - 1, i, count, v, u;
-        uint16_t dist[MAX];
-        bool sptSet[MAX];
-        int parent[MAX];
+        uint16_t dist[LIMIT];
+        bool sptSet[LIMIT];
+        int parent[LIMIT];
         int temp;
 
-        for(i = 0; i < MAX; i++){
-            dist[i] = INFINITY;
+        for(i = 0; i < LIMIT; i++){
+            dist[i] = LARGENUM;
             sptSet[i] = FALSE;
             parent[i] = -1;   
         }
 
         dist[myID] = 0;
 
-        for(count = 0; count < MAX - 1; count++){
-            u = minDist(dist, sptSet);
+        for(count = 0; count < LIMIT - 1; count++){
+            u = minDistance(dist, sptSet);
             sptSet[u] = TRUE;
 
-            for(v = 0; v < MAX; v++){
-                if(!sptSet[v] && LSTable[u][v] != INFINITY && dist[u] + LSTable[u][v] < dist[v]){
+            for(v = 0; v < LIMIT; v++){
+                if(!sptSet[v] && LSTable[u][v] != LARGENUM && dist[u] + LSTable[u][v] < dist[v]){
                     parent[v] = u;
                     dist[v] = dist[u] + LSTable[u][v];
                 }
             }           
         }
 
-        for(i = 0; i < MAX; i++){
+        for(i = 0; i < LIMIT; i++){
             temp = i;
-            while(parent[temp] != -1  && parent[temp] != myID && temp < MAX){
+            while(parent[temp] != -1  && parent[temp] != myID && temp < LIMIT){
                 temp = parent[temp];
             }
             if(parent[temp] != myID){
