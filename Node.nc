@@ -102,10 +102,10 @@ implementation{
       if(len==sizeof(pack)){
          pack* myMsg=(pack*) payload;
          if(packageCheck(myMsg) || myMsg->TTL == 0){ 
-             // dbg(GENERAL_CHANNEL, "Dropping the packet\n");
+              dbg(GENERAL_CHANNEL, "Dropping the packet\n");
          }else if(myMsg->dest == TOS_NODE_ID){  
   
-             //dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // If the packet arrived at the correct destination output the payload   
+             dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // If the packet arrived at the correct destination output the payload   
               
              switch(myMsg->protocol){  
 
@@ -135,7 +135,7 @@ implementation{
              switch(myMsg->protocol){
                 Neighbor neighbor;                                                                                      // Broadcast packets will help us find neighbors    
                 case PROTOCOL_PING:
-                    // dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);                   
+                     dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);                   
                     makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, MAX_TTL, PROTOCOL_PINGREPLY, 
                             myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));                     
 
@@ -170,7 +170,7 @@ implementation{
             addPacket(sendPackage);
 
             if(call RoutingTable.get(myMsg->dest)){
-                // dbg(ROUTING_CHANNEL, "Route found, forwarding to %d\n", call RoutingTable.get(myMsg->dest));
+                 dbg(ROUTING_CHANNEL, "Route found, forwarding to %d\n", call RoutingTable.get(myMsg->dest));
                 call Sender.send(sendPackage, call RoutingTable.get(myMsg->dest));
             }else{
                 dbg(ROUTING_CHANNEL, "Route not found...\n");
