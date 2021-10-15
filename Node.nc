@@ -102,7 +102,7 @@ implementation{
       if(len==sizeof(pack)){
          pack* myMsg=(pack*) payload;
          if(packageCheck(myMsg) || myMsg->TTL == 0){ 
-              dbg(GENERAL_CHANNEL, "Dropping the packet\n");
+              //dbg(GENERAL_CHANNEL, "Packet Dropped\n");
          }else if(myMsg->dest == TOS_NODE_ID){  
   
              dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // If the packet arrived at the correct destination output the payload   
@@ -287,7 +287,7 @@ implementation{
                 i--;
             }
         }
-        dbg(NEIGHBOR_CHANNEL, "Discovery Packets -> Neighbor\n");//DEBUG
+        //dbg(NEIGHBOR_CHANNEL, "Discovery Packets -> Neighbor\n");//DEBUG
         
         message = "swag";  //Packet message 
         makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, 2, PROTOCOL_PING, 1,     //Run makePack with vars to send discovery packet to AM ADDR
