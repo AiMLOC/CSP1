@@ -114,9 +114,12 @@ implementation{
                     seqNum++;
 
                     addPacket(sendPackage);
+                    
+                     dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
+                     call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
                     if(call RoutingTable.get(myMsg->src)){
-                        dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
-                        call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
+                      //dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
+                      //call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
                     }                  
                     else
                         dbg(ROUTING_CHANNEL, "Path not found, cancelling reply\n");
