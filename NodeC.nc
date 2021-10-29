@@ -10,7 +10,6 @@
 #include <Timer.h>
 #include "includes/CommandMsg.h"
 #include "includes/packet.h"
-#include "includes/socket.h"
 
 configuration NodeC{
 }
