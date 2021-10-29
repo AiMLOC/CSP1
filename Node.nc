@@ -216,13 +216,13 @@ implementation{
    event void CommandHandler.printDistanceVector(){}
 
 
-   event void CommandHandler.setTestServer(uint8_t * port){
+   event void CommandHandler.setTestServer(){
 
 
 
    }
 
-   event void CommandHandler.setTestClient(uint8_t * payload){
+   event void CommandHandler.setTestClient(){
       
 
    }
