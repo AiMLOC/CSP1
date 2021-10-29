@@ -201,6 +201,10 @@ implementation{
          dbg(ROUTING_CHANNEL, "Sending to next hop %d\n", call RoutingTable.get(destination));
          call Sender.send(sendPackage, call RoutingTable.get(destination));
       }
+       if(call RoutingTable.get(myMsg->src)){
+                      dbg(ROUTING_CHANNEL, "Path found, sending reply to next hop %d\n", call RoutingTable.get(myMsg->src));
+                      call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
+                    }
       else{
          dbg(ROUTING_CHANNEL, "Route to destination not found...\n");
       }                                                                     
