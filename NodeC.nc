@@ -24,8 +24,6 @@ implementation {
     components new AMReceiverC(AM_PACK) as GeneralReceive;
 
     Node.neighborTimer -> neighborTimer;
-
-    Node.transmitTimer -> transmitTimer;
  
     Node -> MainC.Boot;
 
