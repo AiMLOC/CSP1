@@ -134,7 +134,7 @@ implementation{
              switch(myMsg->protocol){
                 Neighbor neighbor;                                                                                      // Broadcast packets will help us find neighbors    
                 case PROTOCOL_PING:
-                     dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);                   
+                     //dbg(NEIGHBOR_CHANNEL, "Received ping from neighbor Node %d\n", myMsg->src);                   
                     makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, MAX_TTL, PROTOCOL_PINGREPLY, 
                             myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));                     
 
