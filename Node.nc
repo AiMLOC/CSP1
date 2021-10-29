@@ -105,7 +105,7 @@ implementation{
               //dbg(GENERAL_CHANNEL, "Packet Dropped\n");
          }else if(myMsg->dest == TOS_NODE_ID){  
   
-             dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // If the packet arrived at the correct destination output the payload   
+             //dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // If the packet arrived at the correct destination output the payload   
               
              switch(myMsg->protocol){  
 
