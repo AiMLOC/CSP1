@@ -6,6 +6,10 @@
  * @date   2013/09/03
  *Kshav ayer
  */
+typedef struct Neighbor{
+    uint16_t entryNode;
+    uint16_t Age;
+} Neighbor;
 
 #define LARGENUM      1000   //large num for various purposes
 #define LIMIT           20   //artificial limit 
@@ -42,11 +46,6 @@ module Node{
    
 
 }
-
-typedef struct Neighbor{
-    uint16_t entryNode;
-    uint16_t Age;
-} Neighbor;
 
 implementation{
    pack sendPackage;
