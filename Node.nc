@@ -8,7 +8,6 @@
  */
 #define INFINITY      9999
 #define MAX           20
-#define TIMEOUT       140000
 
 typedef struct Neighbor{         // Use a struct to hold neighbor src and age(to account for drop outs)
 
