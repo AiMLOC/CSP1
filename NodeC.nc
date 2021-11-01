@@ -18,7 +18,7 @@ implementation {
     components Node;
    // components RandomC as Random;
     components new TimerMilliC() as neighborTimer;
-    components new TimerMilliC() as transmitTimer;
+    //components new TimerMilliC() as transmitTimer;
     components new AMReceiverC(AM_PACK) as GeneralReceive;
 
     Node.neighborTimer -> neighborTimer;
