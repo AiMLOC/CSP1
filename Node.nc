@@ -31,7 +31,7 @@ module Node{
 
    uses interface Receive;
 
-   uses interface Random as Random;
+  // uses interface Random as Random;
 
    uses interface SimpleSend as Sender;
 
