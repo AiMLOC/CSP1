@@ -27,7 +27,7 @@ implementation {
 
     //new node ref
 
-    Node.RRandom -> Random;
+    Node.Random -> Random;
 
 
 
