@@ -27,7 +27,7 @@ implementation {
 
     //new node ref
 
-    Node.RandomDiscoverNTimer -> RandomDiscoverNTimer;
+    Node.RRandom -> Random;
 
 
 
