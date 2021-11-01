@@ -16,7 +16,7 @@ configuration NodeC{
 implementation {
     components MainC;
     components Node;
-    components RandomC as Random;
+   // components RandomC as Random;
     components new TimerMilliC() as neighborTimer;
     components new TimerMilliC() as transmitTimer;
     components new AMReceiverC(AM_PACK) as GeneralReceive;
@@ -27,7 +27,7 @@ implementation {
 
     Node.Receive -> GeneralReceive;
 
-    Node.Random -> Random;
+    //Node.Random -> Random;
 
     components ActiveMessageC;
     Node.AMControl -> ActiveMessageC;
