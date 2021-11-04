@@ -113,7 +113,7 @@ implementation{
 
                     addPacket(sendPackage);
                     if(call RoutingTable.get(myMsg->src)){
-                        dbg(ROUTING_CHANNEL, "Path Found: %d\n", call RoutingTable.get(myMsg->src));
+                        dbg(ROUTING_CHANNEL, "Next Route: %d\n", call RoutingTable.get(myMsg->src)); //REPLY Found Path next route
                         call Sender.send(sendPackage, call RoutingTable.get(myMsg->src));
                     }                  
                     else
@@ -122,7 +122,7 @@ implementation{
                     break;                                                                                              // Send a ping reply to the source using flooding                           
             
                 case PROTOCOL_PINGREPLY:
-                    dbg(FLOODING_CHANNEL, "Reply: %d\n", myMsg->src);
+                   // dbg(FLOODING_CHANNEL, "Reply: %d\n", myMsg->src);
                     break;                                                                                              // Output if the ping reply was received  
 
             }
@@ -159,8 +159,7 @@ implementation{
     
          }
          else{     
-            makePack(&sendPackage, myMsg->src, myMsg->dest, myMsg->TTL, myMsg->protocol, myMsg->seq, 
-                    (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
+            makePack(&sendPackage, myMsg->src, myMsg->dest, myMsg->TTL, myMsg->protocol, myMsg->seq, (uint8_t *)myMsg->payload, sizeof(myMsg->payload));
 
             addPacket(sendPackage);
 
@@ -307,9 +306,9 @@ implementation{
 
     void linkStateRoutingDijkstra(){
         uint16_t myID = TOS_NODE_ID - 1, i, count, v, u;
-        uint16_t dist[LIMIT];
-        bool sptSet[LIMIT];
-        int parent[LIMIT];
+        uint16_t dist[LIMIT]; //distance 
+        bool sptSet[LIMIT]; //shortest path tree set keeps track of nodes in the SPT min distance from source is calulated
+        int parent[LIMIT]; //parrent array -> updated when distance is updated and stored (shortest path between nodes)
         int temp;
 
         for(i = 0; i < LIMIT; i++){
@@ -383,8 +382,7 @@ implementation{
             strcat(payload, ",");
         }
         
-        makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, 50, PROTOCOL_LINKSTATE, packetNum,
-                (uint8_t *) payload, (uint8_t)sizeof(payload));
+        makePack(&sendPackage, TOS_NODE_ID, AM_BROADCAST_ADDR, 50, PROTOCOL_LINKSTATE, packetNum, (uint8_t *) payload, (uint8_t)sizeof(payload));
 
         packetNum++;
         addPacket(sendPackage);
@@ -404,7 +402,7 @@ implementation{
 
 
     void printLinkStateTable(){
-        uint16_t i;                                            // Print out the neighbor pairs in the local link state table
+        uint16_t i;                                            // Print LSTable
         uint16_t j;
         for(i = 0; i < 20; i++){
             for(j = 0; j < 20; j++){
@@ -415,8 +413,8 @@ implementation{
     }
 
     void printRoutingTable(){
-        
-        uint16_t size = call RoutingTable.size(), i, output;
+        //Print Routing
+        uint16_t size = call RoutingTable.size(), i, output;              
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
             dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
