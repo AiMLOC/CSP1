@@ -414,12 +414,10 @@ implementation{
 
     void printRoutingTable(){
         //Print Routing
-        uint16_t size = call RoutingTable.size(), i, output;   
-        uint16_t distz = 1;           
+        uint16_t size = call RoutingTable.size(), i, output;           
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
-            distz = minDistance(uint16_t dist[i], bool sptSet[i]);
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, distz);
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, minDistance(uint16_t dist[i], bool sptSet[i]));
             //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
         }
 
