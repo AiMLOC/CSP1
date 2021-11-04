@@ -103,7 +103,7 @@ implementation{
          }
          else if(myMsg->dest == TOS_NODE_ID){  
   
-             dbg(FLOODING_CHANNEL, "Package Payload: %s :: Package Source: Node %d\n", myMsg->payload, myMsg->src);     // Show PL if at right node   
+             dbg(FLOODING_CHANNEL, "Payload: %s\t Payload Source: %d\n", myMsg->payload, myMsg->src);     // Show PL if at right node   
               
              switch(myMsg->protocol){  
 
@@ -409,7 +409,7 @@ implementation{
         for(i = 0; i < 20; i++){
             for(j = 0; j < 20; j++){
                 if(LSTable[i][j] == 1)
-                    dbg(ROUTING_CHANNEL, "Node: %d Neighbore Node: %d\n", i + 1, j + 1);
+                    dbg(ROUTING_CHANNEL, "Node: %d\t  Neighbor Node: %d\n", i + 1, j + 1);
             }
         }
     }
