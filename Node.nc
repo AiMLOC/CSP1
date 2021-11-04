@@ -63,6 +63,7 @@ implementation{
    void updateLinkStateTable(uint8_t * payload, uint16_t source);
    void linkStateRoutingDijkstra();
    uint16_t minDistance(uint16_t dist[], bool sptSet[]);
+   uint16_t printDistance[20];
    void printLinkStateTable();
    void printRoutingTable();
              
@@ -398,6 +399,7 @@ implementation{
                 min = dist[i], minIndex = i;
         }
         return minIndex;
+        dbg(ROUTING_CHANNEL, "minIndex: %d\t  min: %d\n", minIndex, min);
     }
 
 
@@ -417,8 +419,8 @@ implementation{
         uint16_t size = call RoutingTable.size(), i, output;              
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
-            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, minDistance(i, i));
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
+            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, minDistance(i, i));
         }
 
         dbg(ROUTING_CHANNEL, "\n");
