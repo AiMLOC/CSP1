@@ -414,7 +414,8 @@ implementation{
 
     void printRoutingTable(){
         //Print Routing
-        uint16_t size = call RoutingTable.size(), i, output, distz;              
+        uint16_t size = call RoutingTable.size(), i, output;   
+        uint16_t distz = 1;           
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
             distz = minDistance(uint16_t dist[i], bool sptSet[i]);
