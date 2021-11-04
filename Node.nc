@@ -417,8 +417,8 @@ implementation{
         uint16_t size = call RoutingTable.size(), i, output;           
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, minDistance(uint16_t dist[i], bool sptSet[i]));
-            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
+            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, minDistance(uint16_t dist[i], bool sptSet[i]));
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
         }
 
         dbg(ROUTING_CHANNEL, "\n");
