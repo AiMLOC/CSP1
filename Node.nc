@@ -165,7 +165,7 @@ implementation{
             addPacket(sendPackage);
 
             if(call RoutingTable.get(myMsg->dest)){
-                 dbg(ROUTING_CHANNEL, "Found Route: %d\n", call RoutingTable.get(myMsg->dest)); //Route found
+                 dbg(ROUTING_CHANNEL, "Next Route: %d\n", call RoutingTable.get(myMsg->dest)); //Route found
                 call Sender.send(sendPackage, call RoutingTable.get(myMsg->dest));
             }else{
                 dbg(ROUTING_CHANNEL, "Route N/A\n");
@@ -189,7 +189,7 @@ implementation{
       packetNum++; 
       
       if(call RoutingTable.get(destination)){
-         dbg(ROUTING_CHANNEL, "Sending to next hop %d\n", call RoutingTable.get(destination));
+         dbg(ROUTING_CHANNEL, "Next Route: %d\n", call RoutingTable.get(destination)); //First Route
          call Sender.send(sendPackage, call RoutingTable.get(destination));
       }
       else{
@@ -409,7 +409,7 @@ implementation{
         for(i = 0; i < 20; i++){
             for(j = 0; j < 20; j++){
                 if(LSTable[i][j] == 1)
-                    dbg(ROUTING_CHANNEL, "Neighbors: %d and %d\n", i + 1, j + 1);
+                    dbg(ROUTING_CHANNEL, "Node: %d Neighbore Node: %d\n", i + 1, j + 1);
             }
         }
     }
@@ -417,9 +417,9 @@ implementation{
     void printRoutingTable(){
         
         uint16_t size = call RoutingTable.size(), i, output;
-        for(i = 0; i < size; i++){
+        for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
-            dbg(ROUTING_CHANNEL, "Key: %d\t Next Hop: %d\n", i, output);
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
         }
 
         dbg(ROUTING_CHANNEL, "\n");
