@@ -414,7 +414,7 @@ implementation{
         }
     }
 
-    void printRoutingTable(){
+    void printRoutingTable(bool sptSet[]){
         //Print Routing
         uint16_t size = call RoutingTable.size(), i, output;              
         for(i = 1; i < size; i++){
