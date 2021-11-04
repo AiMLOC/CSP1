@@ -149,7 +149,7 @@ def main():
     s.ping(8, 5, "Hello, World");
     s.runTime(20);
     #s.neighborDMP(1);
-    s.routeDMP(6);
+    s.routeDMP(5);
     s.runTime(20);
     
 
