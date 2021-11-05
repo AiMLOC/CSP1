@@ -132,9 +132,9 @@ class TestSim:
 def main():
     s = TestSim();
     s.runTime(10);
-    s.loadTopo("long_line.topo");
-    s.loadNoise("example.txt");
-    #s.loadNoise("no_noise.txt");
+    #s.loadTopo("long_line.topo");
+    s.loadNoise("example.topo");
+    s.loadNoise("no_noise.txt");
     s.bootAll();
     s.addChannel(s.COMMAND_CHANNEL);
     s.addChannel(s.GENERAL_CHANNEL);
