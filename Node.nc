@@ -63,10 +63,9 @@ implementation{
    void updateLinkStateTable(uint8_t * payload, uint16_t source);
    void linkStateRoutingDijkstra();
    uint16_t minDistance(uint16_t dist[], bool sptSet[]);
-   uint16_t printDistance[20];
    void printLinkStateTable();
    void printRoutingTable();
-             
+   uint16_t dist[LIMIT];          
    
 
 
@@ -307,7 +306,7 @@ implementation{
 
     void linkStateRoutingDijkstra(){
         uint16_t myID = TOS_NODE_ID - 1, i, count, v, u;
-        uint16_t dist[LIMIT]; //distance 
+        //uint16_t dist[LIMIT]; //distance 
         bool sptSet[LIMIT]; //shortest path tree set keeps track of nodes in the SPT min distance from source is calulated
         int parent[LIMIT]; //parrent array -> updated when distance is updated and stored (shortest path between nodes)
         int temp;
@@ -399,7 +398,6 @@ implementation{
                 min = dist[i], minIndex = i;
         }
         return minIndex;
-        //dbg(ROUTING_CHANNEL, "minIndex: %d\t  min: %d\n", minIndex, min);
     }
 
 
@@ -416,11 +414,11 @@ implementation{
 
     void printRoutingTable(){
         //Print Routing
-        uint16_t size = call RoutingTable.size(), i, output;              
+        uint16_t size = call RoutingTable.size(), i, output;           
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
             //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, minDistance(i, output));
         }
 
         dbg(ROUTING_CHANNEL, "\n");
