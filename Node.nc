@@ -416,10 +416,16 @@ implementation{
 
     void printRoutingTable(){
         //Print Routing
-        uint16_t size = call RoutingTable.size(), i, output;           
+        uint16_t size = call RoutingTable.size(), i, output; 
+        uint16_t x; 
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
+            if (output == 0){
+            x = output;
+}
+            
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, LSTable[i][x]);
+            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
             //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
         }
 
