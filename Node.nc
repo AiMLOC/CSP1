@@ -66,6 +66,7 @@ implementation{
    void printLinkStateTable();
    void printRoutingTable();
    uint16_t dist[LIMIT];          
+   int parent[LIMIT];
    
 
 
@@ -308,7 +309,7 @@ implementation{
         uint16_t myID = TOS_NODE_ID - 1, i, count, v, u;
         //uint16_t dist[LIMIT]; //distance 
         bool sptSet[LIMIT]; //shortest path tree set keeps track of nodes in the SPT min distance from source is calulated
-        int parent[LIMIT]; //parrent array -> updated when distance is updated and stored (shortest path between nodes)
+        //int parent[LIMIT]; //parrent array -> updated when distance is updated and stored (shortest path between nodes)
         int temp;
 
         for(i = 0; i < LIMIT; i++){
@@ -417,7 +418,7 @@ implementation{
         uint16_t size = call RoutingTable.size(), i, output;           
         for(i = 1; i < size; i++){
             output = call RoutingTable.get((uint32_t) i);
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, parent[i]);
             //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
         }
 
