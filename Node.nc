@@ -424,8 +424,8 @@ implementation{
             x = output;
 }
             
-            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, LSTable[i][x]);
-            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
+            //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, LSTable[i][x]);
+            dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\t Cost: %d\n", i, output, dist[i]);
             //dbg(ROUTING_CHANNEL, "Node: %d\t Next Hop: %d\n", i, output);
         }
 
