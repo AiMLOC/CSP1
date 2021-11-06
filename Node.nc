@@ -65,9 +65,9 @@ implementation{
    uint16_t minDistance(uint16_t dist[], bool sptSet[]);
    void printLinkStateTable();
    void printRoutingTable();
-   //uint16_t dist[LIMIT];          
+   uint16_t dist[LIMIT];          
    //int parent[LIMIT];
-   bool sptSet[LIMIT];
+   //bool sptSet[LIMIT];
    
 
 
@@ -308,8 +308,8 @@ implementation{
 
     void linkStateRoutingDijkstra(){
         uint16_t myID = TOS_NODE_ID - 1, i, count, v, u;
-        uint16_t dist[LIMIT]; //distance 
-        //bool sptSet[LIMIT]; //shortest path tree set keeps track of nodes in the SPT min distance from source is calulated
+        //uint16_t dist[LIMIT]; //distance 
+        bool sptSet[LIMIT]; //shortest path tree set keeps track of nodes in the SPT min distance from source is calulated
         int parent[LIMIT]; //parrent array -> updated when distance is updated and stored (shortest path between nodes)
         int temp;
 
