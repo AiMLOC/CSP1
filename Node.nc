@@ -12,7 +12,7 @@ typedef struct Neighbor{
 } Neighbor;
 
 #define LARGENUM      1000   //large num for various purposes
-#define LIMIT           20   //artificial limit 
+#define LIMIT           21   //artificial limit 
 
 #include <Timer.h>
 #include "includes/command.h"
