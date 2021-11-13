@@ -142,15 +142,15 @@ def main():
     s.addChannel(s.FLOODING_CHANNEL);
     s.addChannel(s.ROUTING_CHANNEL);
 
-    s.runTime(20);
+    s.runTime(50);
+    s.routeDMP(4);
     s.runTime(10);
     #s.ping(1, 3, "Hi!");
     s.runTime(20);
     s.runTime(100);
     s.ping(4, 8, "Hello, World");
-    s.runTime(100);
+    #s.runTime(100);
     #s.neighborDMP(1);
-    s.routeDMP(5);
     s.runTime(20);
     
 
